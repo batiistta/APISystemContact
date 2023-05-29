@@ -45,7 +45,3 @@ The API offers the following features:
 ## Contribution
 
 Contributions are welcome! If you find a bug, have a suggestion, or want to add a new feature, feel free to open a new issue or submit a pull request.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
