@@ -1,0 +1,41 @@
+# .NET Core
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+TestResults/
+
+# NuGet
+*.nuget.props
+*.paket/paket.exe
+.paket/paket.bootstrapper.exe
+packages/
+*.nupkg
+!.nuget/
+
+# Build tooling
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+# SDK
+.project*
+*.nuget.targets
+.build/
+npm-debug.log*
+node_modules/
+
+# Other
+[Tt]humbs.db
+*.cache
+*.log
+*.bak
+*.swp
