@@ -39,6 +39,15 @@ namespace APISystemContact.Repository
             return await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        /*public async Task<User> GetByName(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new Exception("Nome não pode ser nulo ou vazio");
+            }           
+            
+        }*/
+
         public async Task<User> Create(User user)
         {
             user.SetPasswordHash();
