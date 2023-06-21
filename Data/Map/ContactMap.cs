@@ -14,8 +14,10 @@ namespace APISystemContact.Data.Map
             builder.Property(x => x.Phone).IsRequired().HasMaxLength(20);
             builder.Property(x => x.UserId).IsRequired();
 
-            builder.HasOne(x => x.User);
-
+            builder.HasOne(x => x.User)
+                .WithMany()
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
        

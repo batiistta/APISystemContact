@@ -1,12 +1,14 @@
 ﻿using APISystemContact.Models;
 using APISystemContact.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+
 
 namespace APISystemContact.Controllers
 {
     [Route("api/contact")]
     [ApiController]
-    public class ContactController : Controller
+    public class ContactController : ControllerBase
     {
         private readonly IContactRepository _contactRepository;
         public ContactController(IContactRepository contactRepository)
@@ -20,12 +22,23 @@ namespace APISystemContact.Controllers
             return Ok(contacts);
         }
 
+        [HttpGet("contactNames")]
+        public ActionResult<List<String>> GetAllContactsNames()
+        {
+
+            List<String> contactsName = _contactRepository.GetAllContactsNames();            
+
+            return Ok(contactsName);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Contact>> GetById(int id)
         {
             Contact contact = await _contactRepository.GetById(id);
             return Ok(contact);
         }
+
+
 
         [HttpPost]
         public async Task<ActionResult<Contact>> Create([FromBody] Contact contactModel)

@@ -2,6 +2,9 @@
 using APISystemContact.Models;
 using APISystemContact.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using APISystemContact.Helper;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace APISystemContact.Repository
 {
@@ -20,6 +23,17 @@ namespace APISystemContact.Repository
             return await _dbContext.Users.ToListAsync();
         }
 
+        public List<String> GetAllUsersNames()
+        {
+            List<string> usersName = _dbContext.Users.Select(x => x.Name).ToList();
+
+            string serializado = JsonConvert.SerializeObject(usersName, Formatting.Indented);
+
+            File.WriteAllText("Data/nomesDeUsuarios.json", serializado);
+
+            return usersName;
+        }
+
         public async Task<User> GetById(int id)
         {
             return await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
@@ -27,6 +41,7 @@ namespace APISystemContact.Repository
 
         public async Task<User> Create(User user)
         {
+            user.SetPasswordHash();
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
             return user;
@@ -47,16 +62,20 @@ namespace APISystemContact.Repository
             return UserById;
         }
         
-        public async Task<bool> Delete(int id)
+        public async Task<bool> Delete(int id, string password)
         {
-            User UserById = await GetById(id);
+            User UserById = await GetById(id);            
             if (UserById == null)
             {
                 throw new Exception($"User with ID: {id} was not found in the database.");
+            }else if(password.GenerateHash() == UserById.Password)
+            {
+                _dbContext.Users.Remove(UserById);
+                await _dbContext.SaveChangesAsync();
+                return true;
             }
-            _dbContext.Users.Remove(UserById);
-            await _dbContext.SaveChangesAsync();
-            return true;
+            return false;
+            
         }
     }
 }

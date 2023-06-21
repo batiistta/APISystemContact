@@ -1,4 +1,5 @@
 ﻿using APISystemContact.Models;
+using APISystemContact.Repository;
 using APISystemContact.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,7 +7,7 @@ namespace APISystemContact.Controllers
 {
     [Route("api/user")]
     [ApiController]
-    public class UserController : Controller
+    public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
         public UserController(IUserRepository userRepository)
@@ -20,6 +21,15 @@ namespace APISystemContact.Controllers
             return Ok(users);
         }
 
+        [HttpGet("usersNames")]
+        public ActionResult<List<String>> GetAllUsersNames()
+        {
+
+            List<String> usersName = _userRepository.GetAllUsersNames();
+
+            return Ok(usersName);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetById(int id)
         {
@@ -29,7 +39,7 @@ namespace APISystemContact.Controllers
 
         [HttpPost]
         public async Task<ActionResult<User>> Create([FromBody] User userModel)
-        {
+        {            
             User user = await _userRepository.Create(userModel);
             return Ok(user);
         }
@@ -43,9 +53,10 @@ namespace APISystemContact.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(int id, string password)
         {
-            bool delete = await _userRepository.Delete(id);
+
+            bool delete = await _userRepository.Delete(id,password);
             return Ok(delete);
         }
 
