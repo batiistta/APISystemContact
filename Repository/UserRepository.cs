@@ -20,7 +20,14 @@ namespace APISystemContact.Repository
 
         public async Task<List<User>> GetAllUsers()
         {
-            return await _dbContext.Users.ToListAsync();
+            var users = await _dbContext.Users.ToListAsync();
+            
+            foreach(var user in _dbContext.Users)
+            {
+                user.Password = null;
+            }
+
+            return users;
         }
 
         public List<String> GetAllUsersNames()
