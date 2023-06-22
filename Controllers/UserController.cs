@@ -1,4 +1,5 @@
-﻿using APISystemContact.Models;
+﻿using APISystemContact.DTOs;
+using APISystemContact.Models;
 using APISystemContact.Repository;
 using APISystemContact.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,17 @@ namespace APISystemContact.Controllers
         public async Task<ActionResult<List<User>>> GetAllUsers()
         {
             List<User> users = await _userRepository.GetAllUsers();
-            return Ok(users);
+            var usersDTO = new List<UserDTO>();
+            foreach (var user in users)
+            {
+                UserDTO userDTO = new UserDTO();
+                userDTO.Name = user.Name;
+                userDTO.Email = user.Email;
+                userDTO.Profile = user.Profile;
+
+                usersDTO.Add(userDTO);
+            }
+            return Ok(usersDTO);
         }
 
         [HttpGet("usersNames")]
