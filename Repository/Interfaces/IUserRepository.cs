@@ -9,7 +9,7 @@ namespace APISystemContact.Repository.Interfaces
         Task<User> GetById(int id);
         Task<User> Create(User user);
         Task<User> Update(User user, int id);
-        Task<bool> Delete(int id, string password);
+        Task<bool> Delete(int id/*, string password*/);
 
 
     }

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using APISystemContact.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using APISystemContact.DTOs;
 
 namespace APISystemContact.Repository
 {
@@ -20,9 +21,17 @@ namespace APISystemContact.Repository
 
         public async Task<List<User>> GetAllUsers()
         {
-            var users = await _dbContext.Users.ToListAsync();            
-           
-            return users;
+            var users = await _dbContext.Users.ToListAsync();
+            var usersDTO = new List<UserDTO>();
+            foreach (var user in users)
+            {
+                UserDTO userDTO = new UserDTO();
+                userDTO.Name = user.Name;
+                userDTO.Email = user.Email;
+                userDTO.Profile = user.Profile;
+            }
+
+            return usersDTO;
         }
 
         public List<String> GetAllUsersNames()
@@ -73,20 +82,27 @@ namespace APISystemContact.Repository
             return UserById;
         }
         
-        public async Task<bool> Delete(int id, string password)
+        public async Task<bool> Delete(int id/*, string password*/)
         {
-            User UserById = await GetById(id);            
+
+            /* if (UserById == null)
+             {
+                 throw new Exception($"User with ID: {id} was not found in the database.");
+             }else if(password.GenerateHash() == UserById.Password)
+             {
+                 _dbContext.Users.Remove(UserById);
+                 await _dbContext.SaveChangesAsync();
+                 return true;
+             }*/
+            User UserById = await GetById(id);
             if (UserById == null)
             {
-                throw new Exception($"User with ID: {id} was not found in the database.");
-            }else if(password.GenerateHash() == UserById.Password)
-            {
-                _dbContext.Users.Remove(UserById);
-                await _dbContext.SaveChangesAsync();
-                return true;
+                throw new Exception($"Contact with ID: {id} was not found in the database.");
             }
-            return false;
-            
+            _dbContext.Users.Remove(UserById);
+            await _dbContext.SaveChangesAsync();
+            return true;
+
         }
     }
 }

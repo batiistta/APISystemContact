@@ -16,14 +16,14 @@ namespace APISystemContact.Controllers
             _contactRepository = contactRepository;
         }
         [HttpGet]
-        public async Task<ActionResult<List<Contact>>> GetAllContacts()
+        public async Task<ActionResult> GetAllContacts()
         {
             List<Contact> contacts = await _contactRepository.GetAllContacts();
             return Ok(contacts);
         }
 
         [HttpGet("contactNames")]
-        public ActionResult<List<String>> GetAllContactsNames()
+        public ActionResult GetAllContactsNames()
         {
 
             List<String> contactsName = _contactRepository.GetAllContactsNames();            
@@ -32,7 +32,7 @@ namespace APISystemContact.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Contact>> GetById(int id)
+        public async Task<ActionResult> GetById(int id)
         {
             Contact contact = await _contactRepository.GetById(id);
             return Ok(contact);
@@ -41,14 +41,14 @@ namespace APISystemContact.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Contact>> Create([FromBody] Contact contactModel)
+        public async Task<ActionResult> Create([FromBody] Contact contactModel)
         {
             Contact contact = await _contactRepository.Create(contactModel);
             return Ok(contact);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Contact>> Update([FromBody] Contact contactModel, int id)
+        public async Task<ActionResult> Update([FromBody] Contact contactModel, int id)
         {
             contactModel.Id = id;
             Contact contact = await _contactRepository.Update(contactModel, id);

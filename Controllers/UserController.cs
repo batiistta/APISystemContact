@@ -16,24 +16,15 @@ namespace APISystemContact.Controllers
             _userRepository = userRepository;
         }
         [HttpGet]
-        public async Task<ActionResult<List<User>>> GetAllUsers()
+        public async Task<ActionResult> GetAllUsers()
         {
             List<User> users = await _userRepository.GetAllUsers();
-            var usersDTO = new List<UserDTO>();
-            foreach (var user in users)
-            {
-                UserDTO userDTO = new UserDTO();
-                userDTO.Name = user.Name;
-                userDTO.Email = user.Email;
-                userDTO.Profile = user.Profile;
-
-                usersDTO.Add(userDTO);
-            }
-            return Ok(usersDTO);
+            
+            return Ok(users);
         }
 
         [HttpGet("usersNames")]
-        public ActionResult<List<String>> GetAllUsersNames()
+        public ActionResult GetAllUsersNames()
         {
 
             List<String> usersName = _userRepository.GetAllUsersNames();
@@ -42,21 +33,21 @@ namespace APISystemContact.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetById(int id)
+        public async Task<ActionResult> GetById(int id)
         {
             User user = await _userRepository.GetById(id);
             return Ok(user);
         }
 
         [HttpPost]
-        public async Task<ActionResult<User>> Create([FromBody] User userModel)
+        public async Task<ActionResult> Create([FromBody] User userModel)
         {            
             User user = await _userRepository.Create(userModel);
             return Ok(user);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<User>> Update([FromBody] User userModel, int id)
+        public async Task<ActionResult> Update([FromBody] User userModel, int id)
         {
             userModel.Id = id;
             User user = await _userRepository.Update(userModel, id);
@@ -64,10 +55,10 @@ namespace APISystemContact.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id, string password)
+        public async Task<ActionResult> Delete(int id/*, string password*/)
         {
 
-            bool delete = await _userRepository.Delete(id,password);
+            bool delete = await _userRepository.Delete(id/*,password*/);
             return Ok(delete);
         }
 
