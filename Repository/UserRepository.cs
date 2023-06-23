@@ -22,16 +22,9 @@ namespace APISystemContact.Repository
         public async Task<List<User>> GetAllUsers()
         {
             var users = await _dbContext.Users.ToListAsync();
-            var usersDTO = new List<UserDTO>();
-            foreach (var user in users)
-            {
-                UserDTO userDTO = new UserDTO();
-                userDTO.Name = user.Name;
-                userDTO.Email = user.Email;
-                userDTO.Profile = user.Profile;
-            }
+            return users;
 
-            return usersDTO;
+            
         }
 
         public List<String> GetAllUsersNames()
@@ -47,7 +40,12 @@ namespace APISystemContact.Repository
 
         public async Task<User> GetById(int id)
         {
-            return await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+            if (user == null)
+            {
+                throw new Exception($"User with ID: {id} was not found in the database.");
+            }
+            return user;
         }
 
         /*public async Task<User> GetByName(string name)
@@ -59,16 +57,34 @@ namespace APISystemContact.Repository
             
         }*/
 
+        /*
         public async Task<User> Create(User user)
         {
             user.SetPasswordHash();
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
             return user;
+        }         
+        */
+
+        public async Task<IEnumerable<User>> Create(IEnumerable<User> users)
+        {
+            foreach (var user in users)
+            {
+                user.SetPasswordHash();
+                await _dbContext.Users.AddAsync(user);
+            }
+
+            await _dbContext.SaveChangesAsync();
+
+            return users;
         }
+
+
 
         public async Task<User> Update(User user, int id)
         {
+
             User UserById = await GetById(id);
             if(UserById == null)
             {
@@ -104,5 +120,6 @@ namespace APISystemContact.Repository
             return true;
 
         }
+        
     }
 }

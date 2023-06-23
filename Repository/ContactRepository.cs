@@ -36,9 +36,14 @@ namespace APISystemContact.Repository
 
         public async Task<Contact> GetById(int id)
         {
-            return await _dbContext.Contacts
+            var contact = await _dbContext.Contacts
                 .Include(x => x.User)
                 .FirstOrDefaultAsync(x => x.Id == id);
+            if(contact == null)
+            {
+                throw new Exception($"Contac with ID {id} was not found in the databse.");
+            }
+            return contact;
         }
 
         public async Task<Contact> Create(Contact contact)

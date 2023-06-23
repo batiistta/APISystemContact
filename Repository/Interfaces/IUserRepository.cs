@@ -7,7 +7,10 @@ namespace APISystemContact.Repository.Interfaces
         Task<List<User>> GetAllUsers();
         List<String> GetAllUsersNames();
         Task<User> GetById(int id);
-        Task<User> Create(User user);
+        //Task<User> Create(User user);
+
+        Task<IEnumerable<User>> Create(IEnumerable<User> users);
+
         Task<User> Update(User user, int id);
         Task<bool> Delete(int id/*, string password*/);
 
